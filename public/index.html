@@ -367,6 +367,7 @@
     let selectedPosition = null;
     let selectedExperience = null;
     let sessionId = null;
+    let chatHistory = [];  // 对话历史，用于API调用
     let messages = [];
     let isLoading = false;
 
@@ -580,7 +581,8 @@
         const data = await response.json();
         
         if (data.success) {
-          sessionId = data.sessionId;
+          sessionId = data.sessionId || Date.now().toString();
+          chatHistory = data.history || [];  // 保存对话历史
           addMessage('assistant', data.message);
         } else {
           addMessage('assistant', `面试开始遇到问题：${data.error}`);
@@ -613,18 +615,22 @@
             position: selectedPosition,
             userExperience: selectedExperience.id,
             message: text,
-            sessionId: sessionId
+            sessionId: sessionId,
+            history: chatHistory  // 传递对话历史
           })
         });
         
         const data = await response.json();
         
         if (data.success) {
+          chatHistory = data.history || chatHistory;  // 更新对话历史
           addMessage('assistant', data.message);
           if (data.ended) {
             document.getElementById('input-area').classList.add('hidden');
             document.getElementById('ended-area').classList.remove('hidden');
           }
+        } else {
+          addMessage('assistant', `回复出错：${data.error || '请重试'}`);
         }
       } catch (error) {
         addMessage('assistant', '网络连接出现问题，请重试。');
@@ -687,6 +693,7 @@
       selectedPosition = null;
       selectedExperience = null;
       sessionId = null;
+      chatHistory = [];  // 重置对话历史
       messages = [];
       
       // 重置经验等级选择

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import ZAI from "z-ai-web-dev-sdk";
 
 // 行业HR面试官设定 - 内置配置，根据用户选择的行业自动匹配
 const hrInterviewerConfigs: Record<string, {
@@ -181,11 +182,8 @@ const experienceConfigs: Record<string, { difficulty: string; label: string; pro
   }
 };
 
-// SDK配置
-const getSDKConfig = () => ({
-  baseUrl: process.env.Z_AI_BASE_URL || "https://open.bigmodel.cn/api/paas/v4",
-  apiKey: process.env.Z_AI_API_KEY || "b6072c1b6697481a9bf6c23a92aa33a2.37IeN1oVmvIjW4AV"
-});
+// SDK配置 - 环境变量
+const getAPIKey = () => process.env.Z_AI_API_KEY || "sk-1c72af143be642a48bc17a719dbe570b";
 
 export async function POST(request: NextRequest) {
   try {
@@ -194,9 +192,8 @@ export async function POST(request: NextRequest) {
 
     console.log("API Request:", { action, industry, position, userExperience, historyLength: history?.length });
 
-    // 使用正确的SDK初始化方式 - 直接传入配置
-    const ZAI = (await import("z-ai-web-dev-sdk")).default;
-    const zai = new ZAI(getSDKConfig());
+    // 使用正确的SDK初始化方式
+    const zai = await ZAI.create({ apiKey: getAPIKey() });
 
     // 开始面试
     if (action === "start") {

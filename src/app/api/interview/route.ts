@@ -182,8 +182,14 @@ const experienceConfigs: Record<string, { difficulty: string; label: string; pro
   }
 };
 
-// SDK配置 - 环境变量
-const getAPIKey = () => process.env.Z_AI_API_KEY || "sk-1c72af143be642a48bc17a719dbe570b";
+// SDK初始化 - 从环境变量或配置文件读取
+const getAPIKey = () => {
+  return process.env.Z_AI_API_KEY || process.env.NEXT_PUBLIC_Z_AI_API_KEY || "";
+};
+
+const getBaseUrl = () => {
+  return process.env.Z_AI_BASE_URL || "https://open.bigmodel.cn/api/paas/v4";
+};
 
 export async function POST(request: NextRequest) {
   try {
@@ -192,8 +198,17 @@ export async function POST(request: NextRequest) {
 
     console.log("API Request:", { action, industry, position, userExperience, historyLength: history?.length });
 
-    // 使用正确的SDK初始化方式
-    const zai = await ZAI.create({ apiKey: getAPIKey() });
+    // SDK初始化 - 显式传递配置
+    const apiKey = getAPIKey();
+    const baseUrl = getBaseUrl();
+
+    let zai;
+    if (apiKey) {
+      zai = await ZAI.create({ apiKey, baseUrl });
+    } else {
+      // 如果没有显式配置，让SDK自动读取配置文件
+      zai = await ZAI.create();
+    }
 
     // 开始面试
     if (action === "start") {

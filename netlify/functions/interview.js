@@ -2,11 +2,11 @@
 // This function handles interview sessions with GLM AI model
 
 // 安全提示：API Key 必须通过环境变量配置，禁止硬编码
-// 在Netlify平台配置环境变量 API_KEY
+// 在Netlify平台配置环境变量: Z_AI_API_KEY 或 GLM_API_KEY 或 API_KEY
 const getApiKey = () => {
-  const apiKey = process.env.API_KEY;
+  const apiKey = process.env.Z_AI_API_KEY || process.env.GLM_API_KEY || process.env.API_KEY;
   if (!apiKey) {
-    console.error("错误：未配置 API_KEY 环境变量");
+    console.error("错误：未配置 API Key 环境变量");
   }
   return apiKey;
 };
@@ -70,8 +70,10 @@ function generateSystemPrompt(industry, position, userExperience) {
 async function callGLMAPI(messages) {
   const apiKey = getApiKey();
   if (!apiKey) {
-    throw new Error('服务配置错误：未配置API Key，请在Netlify环境变量中设置 API_KEY');
+    throw new Error('服务配置错误：未配置API Key，请在Netlify环境变量中设置 Z_AI_API_KEY');
   }
+  
+  console.log('Calling GLM API, messages count:', messages.length);
   
   const response = await fetch(API_URL, {
     method: 'POST',
@@ -89,10 +91,12 @@ async function callGLMAPI(messages) {
 
   if (!response.ok) {
     const errorText = await response.text();
+    console.error('GLM API Error:', response.status, errorText);
     throw new Error(`API调用失败: ${response.status} - ${errorText}`);
   }
 
   const data = await response.json();
+  console.log('GLM API Response success');
   return data.choices[0].message.content;
 }
 
@@ -123,6 +127,8 @@ exports.handler = async (event, context) => {
     const body = JSON.parse(event.body);
     const { action, industry, position, userExperience, message, sessionId } = body;
 
+    console.log('Request:', { action, industry, position, userExperience, sessionId });
+
     // 开始新面试
     if (action === 'start') {
       const newSessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -145,6 +151,14 @@ exports.handler = async (event, context) => {
         createdAt: Date.now()
       });
       
+      // 清理过期会话（超过1小时）
+      const now = Date.now();
+      for (const [id, session] of sessions.entries()) {
+        if (now - session.createdAt > 3600000) {
+          sessions.delete(id);
+        }
+      }
+      
       return {
         statusCode: 200,
         headers,
@@ -164,7 +178,7 @@ exports.handler = async (event, context) => {
         return {
           statusCode: 400,
           headers,
-          body: JSON.stringify({ success: false, error: '会话不存在或已过期' })
+          body: JSON.stringify({ success: false, error: '会话不存在或已过期，请重新开始面试' })
         };
       }
 
@@ -178,7 +192,8 @@ exports.handler = async (event, context) => {
       // 检查是否面试结束
       const ended = aiMessage.includes('感谢你参加今天的面试') || 
                     aiMessage.includes('面试结束') ||
-                    aiMessage.includes('会尽快通知你结果');
+                    aiMessage.includes('会尽快通知你结果') ||
+                    session.messages.length >= 20;
       
       return {
         statusCode: 200,

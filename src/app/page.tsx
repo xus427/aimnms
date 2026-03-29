@@ -316,85 +316,90 @@ export default function MockInterviewPage() {
   // ========== 渲染行业选择界面 ==========
   if (stage === "industry") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 relative overflow-hidden">
-        {/* 背景装饰 */}
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 relative overflow-hidden">
+        {/* 背景装饰 - 更精致的渐变 */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-violet-200/30 dark:bg-violet-900/20 rounded-full blur-3xl" />
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-cyan-200/30 dark:bg-cyan-900/20 rounded-full blur-3xl" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-amber-100/20 dark:bg-amber-900/10 rounded-full blur-3xl" />
+          <div className="absolute -top-20 -right-20 w-[500px] h-[500px] bg-gradient-to-br from-violet-200/40 to-fuchsia-100/30 dark:from-violet-900/20 dark:to-fuchsia-900/10 rounded-full blur-3xl" />
+          <div className="absolute -bottom-20 -left-20 w-[500px] h-[500px] bg-gradient-to-tr from-cyan-200/40 to-teal-100/30 dark:from-cyan-900/20 dark:to-teal-900/10 rounded-full blur-3xl" />
+          <div className="absolute top-1/3 right-1/4 w-[300px] h-[300px] bg-gradient-to-bl from-amber-100/30 to-orange-50/20 dark:from-amber-900/10 dark:to-orange-900/5 rounded-full blur-3xl" />
         </div>
 
-        <div className="container mx-auto px-4 py-8 sm:py-12 max-w-7xl relative z-10">
-          {/* 标题区域 */}
-          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-            <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full bg-gradient-to-r from-violet-500/10 via-fuchsia-500/10 to-pink-500/10 border border-violet-200/50 dark:border-violet-800/50 text-xs sm:text-sm font-medium mb-4 sm:mb-6">
-              <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-violet-500" />
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 lg:py-12">
+          {/* 标题区域 - 更紧凑 */}
+          <div className="text-center mb-6 sm:mb-8 lg:mb-10">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-violet-500/10 via-fuchsia-500/10 to-pink-500/10 border border-violet-200/50 dark:border-violet-700/30 text-sm font-medium mb-3">
+              <Sparkles className="w-4 h-4 text-violet-500" />
               <span className="bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent">AI模拟面试助手</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4">
-              <span className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-600 dark:from-white dark:via-slate-200 dark:to-slate-400 bg-clip-text text-transparent">选择你的目标行业</span>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2">
+              <span className="bg-gradient-to-r from-slate-800 via-slate-700 to-slate-600 dark:from-white dark:via-slate-200 dark:to-slate-400 bg-clip-text text-transparent">选择你的目标行业</span>
             </h1>
-            <p className="text-muted-foreground text-sm sm:text-base lg:text-lg max-w-xl mx-auto leading-relaxed px-4">
-              选择你想应聘的行业，系统将为你匹配对应行业的<span className="font-medium text-foreground">资深HR面试官</span>
+            <p className="text-muted-foreground text-sm sm:text-base max-w-lg mx-auto">
+              选择行业，系统将为你匹配对应的<span className="font-medium text-foreground">资深HR面试官</span>
             </p>
           </div>
 
-          {/* 行业卡片 - 6个行业，响应式布局 */}
-          {/* PC端: 3列x2行均匀分布 | 平板: 2列x3行 | 手机: 单列滚动 */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 mb-8">
+          {/* 行业卡片 - 优化响应式网格布局 */}
+          {/* 手机(640px以下): 单列 | 平板(640-1024px): 2列 | PC(1024px以上): 3列 */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5 xl:gap-6">
             {industries.map((industry) => {
               const Icon = industry.icon;
               const isHovered = hoveredIndustry === industry.id;
 
               return (
-                <div key={industry.id} className="group relative cursor-pointer h-full" onMouseEnter={() => setHoveredIndustry(industry.id)} onMouseLeave={() => setHoveredIndustry(null)} onClick={() => selectIndustry(industry.id)}>
+                <div 
+                  key={industry.id} 
+                  className="group relative cursor-pointer" 
+                  onMouseEnter={() => setHoveredIndustry(industry.id)} 
+                  onMouseLeave={() => setHoveredIndustry(null)} 
+                  onClick={() => selectIndustry(industry.id)}
+                >
                   {/* 发光效果 */}
-                  <div className={`absolute inset-0 rounded-2xl sm:rounded-3xl transition-all duration-500 bg-gradient-to-r ${industry.gradient} opacity-0 blur-xl ${isHovered ? "opacity-30" : ""}`} />
+                  <div className={`absolute -inset-1 rounded-2xl transition-all duration-500 bg-gradient-to-r ${industry.gradient} opacity-0 blur-lg ${isHovered ? "opacity-40" : ""}`} />
 
-                  {/* 卡片主体 - 统一高度，内容均匀分布 */}
-                  <div className={`relative h-full bg-white dark:bg-slate-900/80 rounded-2xl sm:rounded-3xl p-5 sm:p-6 border-2 transition-all duration-300 flex flex-col ${isHovered ? "border-transparent shadow-2xl scale-[1.02] -translate-y-1" : "border-slate-200 dark:border-slate-800 shadow-lg hover:shadow-xl"}`}>
+                  {/* 卡片主体 - 固定高度，内容居中分布 */}
+                  <div className={`relative h-full bg-white/95 dark:bg-slate-900/90 backdrop-blur-sm rounded-2xl border transition-all duration-300 flex flex-col overflow-hidden ${isHovered ? "border-transparent shadow-2xl scale-[1.02]" : "border-slate-200/80 dark:border-slate-700/50 shadow-md hover:shadow-xl hover:border-slate-300 dark:hover:border-slate-600"}`}>
                     {/* 顶部渐变条 */}
-                    <div className={`absolute top-0 left-0 right-0 h-1 sm:h-1.5 rounded-t-2xl sm:rounded-t-3xl bg-gradient-to-r ${industry.gradient} transition-opacity duration-300 ${isHovered ? "opacity-100" : "opacity-60"}`} />
+                    <div className={`h-1.5 bg-gradient-to-r ${industry.gradient}`} />
 
-                    {/* 上部内容区 */}
-                    <div className="flex-shrink-0">
-                      {/* 图标 */}
-                      <div className={`inline-flex p-3 sm:p-4 rounded-xl sm:rounded-2xl mb-4 sm:mb-5 transition-all duration-300 ${industry.iconBg} shadow-lg ${isHovered ? "scale-110 shadow-xl" : ""}`}>
-                        <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
+                    {/* 卡片内容 */}
+                    <div className="flex-1 p-4 sm:p-5 flex flex-col">
+                      {/* 上部：图标和标题 */}
+                      <div className="flex items-start gap-3 sm:gap-4 mb-3">
+                        {/* 图标 */}
+                        <div className={`flex-shrink-0 p-2.5 sm:p-3 rounded-xl transition-all duration-300 ${industry.iconBg} shadow-lg ${isHovered ? "scale-105 shadow-xl" : ""}`}>
+                          <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                        </div>
+                        {/* 标题和统计 */}
+                        <div className="flex-1 min-w-0">
+                          <h3 className={`text-base sm:text-lg font-bold mb-0.5 transition-colors duration-300 truncate ${isHovered ? "bg-gradient-to-r " + industry.gradient + " bg-clip-text text-transparent" : "text-slate-900 dark:text-white"}`}>
+                            {industry.shortName}
+                          </h3>
+                          <p className={`text-xs sm:text-sm font-medium bg-gradient-to-r ${industry.gradient} bg-clip-text text-transparent`}>
+                            {industry.stats}
+                          </p>
+                        </div>
                       </div>
 
-                      {/* 标题 */}
-                      <h3 className={`text-base sm:text-lg font-bold mb-1.5 sm:mb-2 transition-colors duration-300 ${isHovered ? "bg-gradient-to-r " + industry.gradient + " bg-clip-text text-transparent" : "text-slate-900 dark:text-white"}`}>
-                        {industry.shortName}
-                      </h3>
-
-                      {/* 统计 */}
-                      <p className={`text-xs sm:text-sm font-medium bg-gradient-to-r ${industry.gradient} bg-clip-text text-transparent mb-2 sm:mb-3`}>
-                        {industry.stats}
-                      </p>
-                    </div>
-
-                    {/* 中间弹性内容区 - 自动填充 */}
-                    <div className="flex-1 min-h-0">
-                      {/* 描述 */}
-                      <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-3">
+                      {/* 中部：描述 */}
+                      <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-3 line-clamp-2 flex-grow">
                         {industry.description}
                       </p>
 
                       {/* 标签 */}
-                      <div className="flex flex-wrap gap-1 sm:gap-1.5">
+                      <div className="flex flex-wrap gap-1 mb-3">
                         {industry.highlight.split("·").map((tag, i) => (
-                          <span key={i} className={`text-[10px] sm:text-xs px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-gradient-to-r ${industry.lightGradient} text-slate-600 dark:text-slate-300`}>
+                          <span key={i} className={`text-[10px] sm:text-xs px-2 py-0.5 rounded-full bg-gradient-to-r ${industry.lightGradient} text-slate-600 dark:text-slate-300 whitespace-nowrap`}>
                             {tag.trim()}
                           </span>
                         ))}
                       </div>
-                    </div>
 
-                    {/* 底部按钮 - 固定在底部 */}
-                    <div className={`mt-auto pt-3 sm:pt-4 flex items-center justify-center gap-2 py-2 sm:py-2.5 rounded-xl bg-gradient-to-r ${industry.gradient} text-white text-xs sm:text-sm font-medium transition-all duration-300 ${isHovered ? "opacity-100" : "opacity-90"}`}>
-                      开始选择
-                      <ArrowRight className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-300 ${isHovered ? "translate-x-1" : ""}`} />
+                      {/* 底部按钮 */}
+                      <div className={`mt-auto flex items-center justify-center gap-1.5 py-2 sm:py-2.5 rounded-xl bg-gradient-to-r ${industry.gradient} text-white text-xs sm:text-sm font-medium transition-all duration-300 shadow-md ${isHovered ? "shadow-lg opacity-100" : "opacity-90"}`}>
+                        开始选择
+                        <ArrowRight className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-300 ${isHovered ? "translate-x-1" : ""}`} />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -403,7 +408,7 @@ export default function MockInterviewPage() {
           </div>
 
           {/* 底部提示 */}
-          <div className="text-center px-4">
+          <div className="text-center mt-6 sm:mt-8">
             <p className="text-xs sm:text-sm text-muted-foreground">
               💡 选择行业后，将进一步选择具体职位类别和岗位
             </p>
@@ -419,52 +424,73 @@ export default function MockInterviewPage() {
     if (!industry) return null;
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
-        <div className="container mx-auto px-4 py-8 max-w-6xl">
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
-              <Sparkles className="w-4 h-4" />
-              AI模拟面试助手
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 relative overflow-hidden">
+        {/* 背景装饰 */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className={`absolute -top-20 -right-20 w-[400px] h-[400px] bg-gradient-to-br ${industry.gradient} opacity-10 rounded-full blur-3xl`} />
+        </div>
+
+        <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+          {/* 标题区域 */}
+          <div className="text-center mb-6 sm:mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-violet-500/10 via-fuchsia-500/10 to-pink-500/10 border border-violet-200/50 dark:border-violet-700/30 text-sm font-medium mb-3">
+              <Sparkles className="w-4 h-4 text-violet-500" />
+              <span className="bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent">AI模拟面试助手</span>
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold mb-3">选择职位类别</h1>
-            <div className="flex items-center justify-center gap-2 text-muted-foreground">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-2">选择职位类别</h1>
+            <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
               <span>当前行业：</span>
-              <Badge className={`bg-gradient-to-r ${industry.gradient} text-white border-0`}>
+              <Badge className={`bg-gradient-to-r ${industry.gradient} text-white border-0 text-xs`}>
                 {industry.name}
               </Badge>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+          {/* 类别卡片 */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-6">
             {industry.categories.map((category) => {
               const Icon = category.icon;
               const isSelected = selectedCategory === category.id;
 
               return (
-                <Card key={category.id} className={`cursor-pointer transition-all duration-200 group ${isSelected ? "ring-2 ring-offset-2 ring-offset-background shadow-lg" : "hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700"}`} onClick={() => selectCategory(category.id)}>
-                  <CardContent className="p-5">
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className={`p-2.5 rounded-xl ${industry.iconBg} shadow-md group-hover:scale-110 transition-transform`}>
-                        <Icon className="w-5 h-5 text-white" />
-                      </div>
-                      <h3 className="font-semibold">{category.name}</h3>
+                <div 
+                  key={category.id} 
+                  className={`relative cursor-pointer rounded-xl border transition-all duration-200 ${isSelected ? "border-2 shadow-lg scale-[1.02]" : "border-slate-200 dark:border-slate-700 hover:shadow-md hover:border-slate-300 dark:hover:border-slate-600"}`}
+                  onClick={() => selectCategory(category.id)}
+                >
+                  {/* 选中指示器 */}
+                  {isSelected && (
+                    <div className={`absolute -top-1 -right-1 w-5 h-5 rounded-full bg-gradient-to-r ${industry.gradient} flex items-center justify-center shadow-md`}>
+                      <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                      </svg>
                     </div>
-                    <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                      {category.positions.slice(0, 2).join("、")}...
+                  )}
+                  
+                  <div className="p-4 sm:p-5 bg-white/90 dark:bg-slate-900/80 rounded-xl">
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className={`p-2 sm:p-2.5 rounded-lg ${industry.iconBg} shadow-md`}>
+                        <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                      </div>
+                      <h3 className="font-semibold text-sm sm:text-base">{category.name}</h3>
+                    </div>
+                    <p className="text-xs sm:text-sm text-muted-foreground mb-2 line-clamp-2">
+                      {category.positions.slice(0, 3).join("、")}
                     </p>
                     <div className="flex items-center justify-between">
-                      <Badge variant="outline">{category.positions.length}个职位</Badge>
-                      <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                      <span className="text-xs text-muted-foreground">{category.positions.length}个职位</span>
+                      <ArrowRight className={`w-4 h-4 transition-all ${isSelected ? "text-primary" : "text-muted-foreground"}`} />
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               );
             })}
           </div>
 
-          <div className="flex justify-center gap-4">
-            <Button variant="outline" onClick={() => setStage("industry")}>
-              <ChevronLeft className="w-4 h-4 mr-2" />
+          {/* 底部按钮 */}
+          <div className="flex justify-center">
+            <Button variant="outline" onClick={() => setStage("industry")} className="text-sm">
+              <ChevronLeft className="w-4 h-4 mr-1" />
               返回选择行业
             </Button>
           </div>
@@ -480,16 +506,22 @@ export default function MockInterviewPage() {
     if (!industry || !category) return null;
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
-        <div className="container mx-auto px-4 py-8 max-w-6xl">
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
-              <Sparkles className="w-4 h-4" />
-              AI模拟面试助手
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 relative overflow-hidden">
+        {/* 背景装饰 */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className={`absolute -top-20 -right-20 w-[400px] h-[400px] bg-gradient-to-br ${industry.gradient} opacity-10 rounded-full blur-3xl`} />
+        </div>
+
+        <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+          {/* 标题区域 */}
+          <div className="text-center mb-6 sm:mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-violet-500/10 via-fuchsia-500/10 to-pink-500/10 border border-violet-200/50 dark:border-violet-700/30 text-sm font-medium mb-3">
+              <Sparkles className="w-4 h-4 text-violet-500" />
+              <span className="bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent">AI模拟面试助手</span>
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold mb-3">选择具体职位</h1>
-            <div className="flex items-center justify-center gap-2 text-muted-foreground flex-wrap">
-              <Badge className={`bg-gradient-to-r ${industry.gradient} text-white border-0`}>
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-2">选择具体职位</h1>
+            <div className="flex items-center justify-center gap-1.5 text-sm text-muted-foreground flex-wrap">
+              <Badge className={`bg-gradient-to-r ${industry.gradient} text-white border-0 text-xs`}>
                 {industry.shortName}
               </Badge>
               <span>·</span>
@@ -497,29 +529,37 @@ export default function MockInterviewPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-8">
+          {/* 职位列表 - 紧凑布局 */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 mb-6">
             {category.positions.map((position) => {
               const isSelected = selectedPosition === position;
 
               return (
-                <Card key={position} className={`cursor-pointer transition-all duration-200 ${isSelected ? "ring-2 ring-primary ring-offset-2 ring-offset-background shadow-md" : "hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700"}`} onClick={() => selectPosition(position)}>
-                  <CardContent className="p-4 flex items-center justify-between">
-                    <span className="font-medium text-sm">{position}</span>
-                    {isSelected && <div className={`w-2.5 h-2.5 rounded-full bg-gradient-to-r ${industry.gradient}`} />}
-                  </CardContent>
-                </Card>
+                <div 
+                  key={position} 
+                  className={`cursor-pointer rounded-lg border px-4 py-3 transition-all duration-200 ${isSelected ? `border-2 bg-gradient-to-r ${industry.lightGradient} shadow-md` : "border-slate-200 dark:border-slate-700 bg-white/90 dark:bg-slate-900/80 hover:shadow-md hover:border-slate-300 dark:hover:border-slate-600"}`}
+                  onClick={() => selectPosition(position)}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium text-sm truncate">{position}</span>
+                    {isSelected && (
+                      <div className={`ml-2 w-2 h-2 rounded-full bg-gradient-to-r ${industry.gradient} flex-shrink-0`} />
+                    )}
+                  </div>
+                </div>
               );
             })}
           </div>
 
-          <div className="flex justify-center gap-4">
-            <Button variant="outline" onClick={() => setStage("category")}>
-              <ChevronLeft className="w-4 h-4 mr-2" />
+          {/* 底部按钮 */}
+          <div className="flex flex-col sm:flex-row justify-center gap-3">
+            <Button variant="outline" onClick={() => setStage("category")} className="text-sm">
+              <ChevronLeft className="w-4 h-4 mr-1" />
               返回选择类别
             </Button>
-            <Button size="lg" disabled={!selectedPosition} onClick={() => setStage("experience")}>
+            <Button disabled={!selectedPosition} onClick={() => setStage("experience")} className={`text-sm ${selectedPosition ? `bg-gradient-to-r ${industry.gradient} hover:opacity-90` : ""}`}>
               下一步
-              <ChevronRight className="w-5 w-5 ml-2" />
+              <ChevronRight className="w-4 h-4 ml-1" />
             </Button>
           </div>
         </div>
@@ -534,46 +574,67 @@ export default function MockInterviewPage() {
     if (!industry || !category || !selectedPosition) return null;
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
-        <div className="container mx-auto px-4 py-8 max-w-6xl">
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
-              <Sparkles className="w-4 h-4" />
-              AI模拟面试助手
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 relative overflow-hidden">
+        {/* 背景装饰 */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className={`absolute -top-20 -right-20 w-[400px] h-[400px] bg-gradient-to-br ${industry.gradient} opacity-10 rounded-full blur-3xl`} />
+        </div>
+
+        <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+          {/* 标题区域 */}
+          <div className="text-center mb-6 sm:mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-violet-500/10 via-fuchsia-500/10 to-pink-500/10 border border-violet-200/50 dark:border-violet-700/30 text-sm font-medium mb-3">
+              <Sparkles className="w-4 h-4 text-violet-500" />
+              <span className="bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent">AI模拟面试助手</span>
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold mb-3">选择你的经验等级</h1>
-            <div className="flex items-center justify-center gap-2 text-muted-foreground flex-wrap">
-              <Badge className={`bg-gradient-to-r ${industry.gradient} text-white border-0`}>{industry.shortName}</Badge>
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-2">选择你的经验等级</h1>
+            <div className="flex items-center justify-center gap-1.5 text-sm text-muted-foreground flex-wrap">
+              <Badge className={`bg-gradient-to-r ${industry.gradient} text-white border-0 text-xs`}>{industry.shortName}</Badge>
               <span>·</span>
               <span>{category.name}</span>
               <span>·</span>
-              <span className="font-medium text-primary">{selectedPosition}</span>
+              <span className="font-medium text-primary truncate max-w-[150px] sm:max-w-none">{selectedPosition}</span>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-8">
+          {/* 经验等级卡片 */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 mb-6">
             {experienceLevels.map((level) => {
               const isSelected = selectedExperience === level.id;
 
               return (
-                <Card key={level.id} className={`cursor-pointer transition-all duration-200 ${isSelected ? "ring-2 ring-primary ring-offset-2 ring-offset-background shadow-lg" : "hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700"}`} onClick={() => setSelectedExperience(level.id)}>
-                  <CardContent className="p-5 text-center">
-                    <div className="text-3xl mb-3">{level.icon}</div>
-                    <h3 className="font-semibold mb-2">{level.name}</h3>
-                    <p className="text-xs text-muted-foreground leading-relaxed">{level.description}</p>
-                  </CardContent>
-                </Card>
+                <div 
+                  key={level.id} 
+                  className={`cursor-pointer rounded-xl border transition-all duration-200 ${isSelected ? "border-2 shadow-lg scale-[1.02]" : "border-slate-200 dark:border-slate-700 hover:shadow-md hover:border-slate-300 dark:hover:border-slate-600"}`}
+                  onClick={() => setSelectedExperience(level.id)}
+                >
+                  {/* 选中指示器 */}
+                  {isSelected && (
+                    <div className={`absolute -top-1 -right-1 w-5 h-5 rounded-full bg-gradient-to-r ${industry.gradient} flex items-center justify-center shadow-md`}>
+                      <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                  )}
+
+                  <div className="p-3 sm:p-4 text-center bg-white/90 dark:bg-slate-900/80 rounded-xl relative">
+                    <div className="text-2xl sm:text-3xl mb-2">{level.icon}</div>
+                    <h3 className="font-semibold text-xs sm:text-sm mb-1">{level.name}</h3>
+                    <p className="text-[10px] sm:text-xs text-muted-foreground leading-relaxed line-clamp-2">{level.description}</p>
+                  </div>
+                </div>
               );
             })}
           </div>
 
-          <div className="flex justify-center gap-4">
-            <Button variant="outline" onClick={() => setStage("position")}>
-              <ChevronLeft className="w-4 h-4 mr-2" />
+          {/* 底部按钮 */}
+          <div className="flex flex-col sm:flex-row justify-center gap-3">
+            <Button variant="outline" onClick={() => setStage("position")} className="text-sm">
+              <ChevronLeft className="w-4 h-4 mr-1" />
               返回选择职位
             </Button>
-            <Button size="lg" disabled={!selectedExperience} onClick={startInterview} className={`bg-gradient-to-r ${industry.gradient} hover:opacity-90`}>
-              <Zap className="w-4 h-4 mr-2" />
+            <Button disabled={!selectedExperience} onClick={startInterview} className={`text-sm ${selectedExperience ? `bg-gradient-to-r ${industry.gradient} hover:opacity-90` : ""}`}>
+              <Zap className="w-4 h-4 mr-1" />
               开始模拟面试
             </Button>
           </div>
@@ -587,26 +648,27 @@ export default function MockInterviewPage() {
   const experience = getExperienceInfo();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 flex flex-col">
-      {/* Header */}
-      <div className="border-b bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-3 max-w-4xl">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 flex flex-col">
+      {/* Header - 简洁顶部栏 */}
+      <div className="border-b bg-white/90 dark:bg-slate-900/90 backdrop-blur-md sticky top-0 z-10 shadow-sm">
+        <div className="w-full max-w-3xl mx-auto px-4 py-2.5 sm:py-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className={`p-2.5 rounded-xl ${industry?.iconBg} shadow-md`}>
-                {industry && <industry.icon className="w-5 h-5 text-white" />}
+            <div className="flex items-center gap-2.5 sm:gap-3">
+              <div className={`p-2 sm:p-2.5 rounded-lg ${industry?.iconBg} shadow-md`}>
+                {industry && <industry.icon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />}
               </div>
-              <div>
-                <h2 className="font-semibold">{selectedPosition}</h2>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Badge variant="secondary" className="text-xs">{experience?.name}</Badge>
-                  <span className="hidden sm:inline">· {industry?.shortName}</span>
+              <div className="min-w-0">
+                <h2 className="font-semibold text-sm sm:text-base truncate">{selectedPosition}</h2>
+                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <Badge variant="secondary" className="text-[10px] sm:text-xs px-1.5 sm:px-2">{experience?.name}</Badge>
+                  <span className="hidden sm:inline">·</span>
+                  <span className="hidden sm:inline">{industry?.shortName}</span>
                 </div>
               </div>
             </div>
-            <Button variant="outline" size="sm" onClick={restartInterview}>
-              <RotateCcw className="w-4 h-4 mr-2" />
-              重新开始
+            <Button variant="outline" size="sm" onClick={restartInterview} className="text-xs sm:text-sm h-8 px-2 sm:px-3">
+              <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4 sm:mr-1" />
+              <span className="hidden sm:inline">重新开始</span>
             </Button>
           </div>
         </div>
@@ -614,19 +676,19 @@ export default function MockInterviewPage() {
 
       {/* 聊天区域 */}
       <div className="flex-1 overflow-hidden">
-        <ScrollArea className="h-[calc(100vh-180px)]" ref={scrollRef}>
-          <div className="container mx-auto px-4 py-6 max-w-4xl">
-            <div className="space-y-4">
+        <ScrollArea className="h-[calc(100vh-140px)] sm:h-[calc(100vh-160px)]" ref={scrollRef}>
+          <div className="w-full max-w-3xl mx-auto px-4 py-4 sm:py-6">
+            <div className="space-y-3 sm:space-y-4">
               {messages.map((message) => (
-                <div key={message.id} className={`flex gap-3 ${message.role === "user" ? "flex-row-reverse" : ""}`}>
-                  <Avatar className="w-8 h-8 flex-shrink-0">
-                    <AvatarFallback className={message.role === "user" ? "bg-primary text-primary-foreground" : "bg-slate-100 dark:bg-slate-800"}>
-                      {message.role === "user" ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
+                <div key={message.id} className={`flex gap-2 sm:gap-3 ${message.role === "user" ? "flex-row-reverse" : ""}`}>
+                  <Avatar className="w-7 h-7 sm:w-8 sm:h-8 flex-shrink-0">
+                    <AvatarFallback className={`${message.role === "user" ? `bg-gradient-to-r ${industry?.gradient || "from-violet-500 to-fuchsia-500"} text-white` : "bg-slate-100 dark:bg-slate-800"}`}>
+                      {message.role === "user" ? <User className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <Bot className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
                     </AvatarFallback>
                   </Avatar>
-                  <div className={`max-w-[80%] rounded-2xl px-4 py-3 ${message.role === "user" ? "bg-primary text-primary-foreground" : "bg-white dark:bg-slate-800 border shadow-sm"}`}>
-                    <div className="whitespace-pre-wrap text-sm leading-relaxed">{message.content}</div>
-                    <div className={`text-xs mt-2 ${message.role === "user" ? "text-primary-foreground/60" : "text-muted-foreground"}`}>
+                  <div className={`max-w-[85%] sm:max-w-[80%] rounded-xl sm:rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 ${message.role === "user" ? `bg-gradient-to-r ${industry?.gradient || "from-violet-500 to-fuchsia-500"} text-white` : "bg-white dark:bg-slate-800 border shadow-sm"}`}>
+                    <div className="whitespace-pre-wrap text-xs sm:text-sm leading-relaxed">{message.content}</div>
+                    <div className={`text-[10px] sm:text-xs mt-1.5 sm:mt-2 ${message.role === "user" ? "text-white/70" : "text-muted-foreground"}`}>
                       {message.timestamp.toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" })}
                     </div>
                   </div>
@@ -634,16 +696,16 @@ export default function MockInterviewPage() {
               ))}
 
               {isLoading && (
-                <div className="flex gap-3">
-                  <Avatar className="w-8 h-8 flex-shrink-0">
+                <div className="flex gap-2 sm:gap-3">
+                  <Avatar className="w-7 h-7 sm:w-8 sm:h-8 flex-shrink-0">
                     <AvatarFallback className="bg-slate-100 dark:bg-slate-800">
-                      <Bot className="w-4 h-4" />
+                      <Bot className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     </AvatarFallback>
                   </Avatar>
-                  <div className="bg-white dark:bg-slate-800 border shadow-sm rounded-2xl px-4 py-3">
+                  <div className="bg-white dark:bg-slate-800 border shadow-sm rounded-xl sm:rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3">
                     <div className="flex items-center gap-2">
-                      <Loader2 className="w-4 h-4 animate-spin text-primary" />
-                      <span className="text-sm text-muted-foreground">正在思考...</span>
+                      <Loader2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-spin text-violet-500" />
+                      <span className="text-xs sm:text-sm text-muted-foreground">正在思考...</span>
                     </div>
                   </div>
                 </div>
@@ -654,24 +716,24 @@ export default function MockInterviewPage() {
       </div>
 
       {/* 输入区域 */}
-      <div className="border-t bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4 max-w-4xl">
+      <div className="border-t bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+        <div className="w-full max-w-3xl mx-auto px-4 py-3 sm:py-4">
           {stage === "ended" ? (
-            <div className="text-center py-4">
-              <p className="text-muted-foreground mb-4">🎉 面试已结束，祝你求职顺利！</p>
-              <Button onClick={restartInterview}>
+            <div className="text-center py-3 sm:py-4">
+              <p className="text-muted-foreground text-sm sm:text-base mb-3 sm:mb-4">🎉 面试已结束，祝你求职顺利！</p>
+              <Button onClick={restartInterview} className={`bg-gradient-to-r ${industry?.gradient} hover:opacity-90`}>
                 <RotateCcw className="w-4 h-4 mr-2" />
                 开始新一轮面试
               </Button>
             </div>
           ) : (
-            <div className="flex gap-3">
+            <div className="flex gap-2 sm:gap-3">
               <Textarea
                 ref={textareaRef}
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 placeholder="输入你的回答..."
-                className="min-h-[44px] max-h-32 resize-none"
+                className="min-h-[40px] sm:min-h-[44px] max-h-24 sm:max-h-32 resize-none text-sm"
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
@@ -680,7 +742,7 @@ export default function MockInterviewPage() {
                 }}
                 disabled={isLoading}
               />
-              <Button onClick={sendMessage} disabled={!inputValue.trim() || isLoading} className="h-11 px-4">
+              <Button onClick={sendMessage} disabled={!inputValue.trim() || isLoading} className={`h-10 sm:h-11 px-3 sm:px-4 ${industry ? `bg-gradient-to-r ${industry.gradient} hover:opacity-90` : ""}`}>
                 {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
               </Button>
             </div>

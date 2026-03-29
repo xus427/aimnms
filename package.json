@@ -26,6 +26,7 @@
     "z-ai-web-dev-sdk": "^0.0.17"
   },
   "devDependencies": {
+    "@netlify/plugin-nextjs": "^5.15.9",
     "@tailwindcss/postcss": "^4",
     "@types/react": "^19",
     "@types/react-dom": "^19",

@@ -319,6 +319,26 @@
           { id: "cons_research", name: "研究与支持类", positions: ["行业研究员", "数据分析师", "知识管理专员", "市场调研员"] },
           { id: "cons_func", name: "内部职能类", positions: ["财务", "IT支持", "人力资源", "行政", "市场部"] }
         ]
+      },
+      {
+        id: "education",
+        name: "教育/培训行业",
+        shortName: "教育培训",
+        icon: `<svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>`,
+        description: "K12教育、高等教育、职业培训、在线教育，涵盖教学教研与管理运营岗位",
+        gradient: "from-green-500 via-lime-500 to-emerald-500",
+        lightGradient: "from-green-100 to-emerald-100",
+        iconBg: "bg-gradient-to-br from-green-500 to-emerald-500",
+        stats: "24个热门职位",
+        highlight: "教学 · 教研 · 运营 · 管理",
+        categories: [
+          { id: "edu_teacher", name: "教学类", positions: ["学科教师（语数英理化生）", "幼教老师", "小学教师", "初高中教师", "国际学校教师", "特教老师", "艺术教师（音乐/美术/舞蹈）", "体育教练"] },
+          { id: "edu_research", name: "教研与课程类", positions: ["教研员", "课程设计师", "教学研究员", "教材编辑", "教辅产品经理", "试题研究员"] },
+          { id: "edu_training", name: "培训与企业教育类", positions: ["企业培训师", "职业培训讲师", "技术培训师", "内训师", "课程顾问", "学习发展经理"] },
+          { id: "edu_online", name: "在线教育类", positions: ["在线讲师/主播", "直播运营", "课程运营", "用户运营", "社群运营", "教务班主任", "学习顾问"] },
+          { id: "edu_manage", name: "管理与运营类", positions: ["校长/园长", "教务主任", "年级组长", "招生主管", "市场主管", "校区运营经理", "班主任"] },
+          { id: "edu_func", name: "职能支持类", positions: ["教育产品经理", "技术开发", "数据分析", "人力资源", "财务", "行政", "品牌公关"] }
+        ]
       }
     ];
 
@@ -337,7 +357,8 @@
       manufacturing: { name: "制造业/实体工业", hrType: "综合人事经理", focus: "法规知识、实操经验、细节管理" },
       finance: { name: "金融行业", hrType: "HR总监", focus: "合规意识、风险控制、专业判断" },
       retail: { name: "消费品/零售/连锁", hrType: "区域HR总监", focus: "执行力、抗压能力、多任务处理" },
-      consulting: { name: "咨询/专业服务", hrType: "HR合伙人", focus: "专业深度、思维逻辑、客户意识" }
+      consulting: { name: "咨询/专业服务", hrType: "HR合伙人", focus: "专业深度、思维逻辑、客户意识" },
+      education: { name: "教育/培训行业", hrType: "人事主任", focus: "教学能力、沟通表达、教育情怀" }
     };
 
     // 状态变量

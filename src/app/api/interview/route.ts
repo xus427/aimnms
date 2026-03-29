@@ -181,12 +181,10 @@ const experienceConfigs: Record<string, { difficulty: string; label: string; pro
   }
 };
 
-// SDK配置 - 必须通过环境变量配置API Key
+// SDK配置
 const getSDKConfig = () => {
-  const apiKey = process.env.Z_AI_API_KEY;
-  if (!apiKey) {
-    throw new Error("缺少环境变量 Z_AI_API_KEY，请在Netlify控制台配置");
-  }
+  // 优先使用环境变量，如果没有则使用默认配置
+  const apiKey = process.env.Z_AI_API_KEY || "sk-1c72af143be642a48bc17a719dbe570b";
   return {
     baseUrl: process.env.Z_AI_BASE_URL || "https://open.bigmodel.cn/api/paas/v4",
     apiKey

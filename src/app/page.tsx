@@ -324,70 +324,77 @@ export default function MockInterviewPage() {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-amber-100/20 dark:bg-amber-900/10 rounded-full blur-3xl" />
         </div>
 
-        <div className="container mx-auto px-4 py-12 max-w-7xl relative z-10">
+        <div className="container mx-auto px-4 py-8 sm:py-12 max-w-7xl relative z-10">
           {/* 标题区域 */}
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-violet-500/10 via-fuchsia-500/10 to-pink-500/10 border border-violet-200/50 dark:border-violet-800/50 text-sm font-medium mb-6">
-              <Sparkles className="w-4 h-4 text-violet-500" />
+          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+            <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full bg-gradient-to-r from-violet-500/10 via-fuchsia-500/10 to-pink-500/10 border border-violet-200/50 dark:border-violet-800/50 text-xs sm:text-sm font-medium mb-4 sm:mb-6">
+              <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-violet-500" />
               <span className="bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent">AI模拟面试助手</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4">
               <span className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-600 dark:from-white dark:via-slate-200 dark:to-slate-400 bg-clip-text text-transparent">选择你的目标行业</span>
             </h1>
-            <p className="text-muted-foreground text-lg max-w-xl mx-auto leading-relaxed">
+            <p className="text-muted-foreground text-sm sm:text-base lg:text-lg max-w-xl mx-auto leading-relaxed px-4">
               选择你想应聘的行业，系统将为你匹配对应行业的<span className="font-medium text-foreground">资深HR面试官</span>
             </p>
           </div>
 
-          {/* 行业卡片 */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-5 mb-8">
+          {/* 行业卡片 - 6个行业，响应式布局 */}
+          {/* PC端: 3列x2行均匀分布 | 平板: 2列x3行 | 手机: 单列滚动 */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 mb-8">
             {industries.map((industry) => {
               const Icon = industry.icon;
               const isHovered = hoveredIndustry === industry.id;
 
               return (
-                <div key={industry.id} className="group relative cursor-pointer" onMouseEnter={() => setHoveredIndustry(industry.id)} onMouseLeave={() => setHoveredIndustry(null)} onClick={() => selectIndustry(industry.id)}>
+                <div key={industry.id} className="group relative cursor-pointer h-full" onMouseEnter={() => setHoveredIndustry(industry.id)} onMouseLeave={() => setHoveredIndustry(null)} onClick={() => selectIndustry(industry.id)}>
                   {/* 发光效果 */}
-                  <div className={`absolute inset-0 rounded-3xl transition-all duration-500 bg-gradient-to-r ${industry.gradient} opacity-0 blur-xl ${isHovered ? "opacity-30" : ""}`} />
+                  <div className={`absolute inset-0 rounded-2xl sm:rounded-3xl transition-all duration-500 bg-gradient-to-r ${industry.gradient} opacity-0 blur-xl ${isHovered ? "opacity-30" : ""}`} />
 
-                  {/* 卡片主体 */}
-                  <div className={`relative h-full bg-white dark:bg-slate-900/80 rounded-3xl p-6 border-2 transition-all duration-300 ${isHovered ? "border-transparent shadow-2xl scale-[1.02] -translate-y-1" : "border-slate-200 dark:border-slate-800 shadow-lg hover:shadow-xl"}`}>
+                  {/* 卡片主体 - 统一高度，内容均匀分布 */}
+                  <div className={`relative h-full bg-white dark:bg-slate-900/80 rounded-2xl sm:rounded-3xl p-5 sm:p-6 border-2 transition-all duration-300 flex flex-col ${isHovered ? "border-transparent shadow-2xl scale-[1.02] -translate-y-1" : "border-slate-200 dark:border-slate-800 shadow-lg hover:shadow-xl"}`}>
                     {/* 顶部渐变条 */}
-                    <div className={`absolute top-0 left-0 right-0 h-1.5 rounded-t-3xl bg-gradient-to-r ${industry.gradient} transition-opacity duration-300 ${isHovered ? "opacity-100" : "opacity-60"}`} />
+                    <div className={`absolute top-0 left-0 right-0 h-1 sm:h-1.5 rounded-t-2xl sm:rounded-t-3xl bg-gradient-to-r ${industry.gradient} transition-opacity duration-300 ${isHovered ? "opacity-100" : "opacity-60"}`} />
 
-                    {/* 图标 */}
-                    <div className={`inline-flex p-4 rounded-2xl mb-5 transition-all duration-300 ${industry.iconBg} shadow-lg ${isHovered ? "scale-110 shadow-xl" : ""}`}>
-                      <Icon className="w-7 h-7 text-white" />
+                    {/* 上部内容区 */}
+                    <div className="flex-shrink-0">
+                      {/* 图标 */}
+                      <div className={`inline-flex p-3 sm:p-4 rounded-xl sm:rounded-2xl mb-4 sm:mb-5 transition-all duration-300 ${industry.iconBg} shadow-lg ${isHovered ? "scale-110 shadow-xl" : ""}`}>
+                        <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
+                      </div>
+
+                      {/* 标题 */}
+                      <h3 className={`text-base sm:text-lg font-bold mb-1.5 sm:mb-2 transition-colors duration-300 ${isHovered ? "bg-gradient-to-r " + industry.gradient + " bg-clip-text text-transparent" : "text-slate-900 dark:text-white"}`}>
+                        {industry.shortName}
+                      </h3>
+
+                      {/* 统计 */}
+                      <p className={`text-xs sm:text-sm font-medium bg-gradient-to-r ${industry.gradient} bg-clip-text text-transparent mb-2 sm:mb-3`}>
+                        {industry.stats}
+                      </p>
                     </div>
 
-                    {/* 标题 */}
-                    <h3 className={`text-lg font-bold mb-2 transition-colors duration-300 ${isHovered ? "bg-gradient-to-r " + industry.gradient + " bg-clip-text text-transparent" : "text-slate-900 dark:text-white"}`}>
-                      {industry.shortName}
-                    </h3>
+                    {/* 中间弹性内容区 - 自动填充 */}
+                    <div className="flex-1 min-h-0">
+                      {/* 描述 */}
+                      <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-3">
+                        {industry.description}
+                      </p>
 
-                    {/* 统计 */}
-                    <p className={`text-sm font-medium bg-gradient-to-r ${industry.gradient} bg-clip-text text-transparent mb-3`}>
-                      {industry.stats}
-                    </p>
-
-                    {/* 描述 */}
-                    <p className="text-sm text-muted-foreground leading-relaxed mb-4 line-clamp-2">
-                      {industry.description}
-                    </p>
-
-                    {/* 标签 */}
-                    <div className="flex flex-wrap gap-1.5 mb-4">
-                      {industry.highlight.split("·").map((tag, i) => (
-                        <span key={i} className={`text-xs px-2.5 py-1 rounded-full bg-gradient-to-r ${industry.lightGradient} text-slate-600 dark:text-slate-300`}>
-                          {tag.trim()}
-                        </span>
-                      ))}
+                      {/* 标签 */}
+                      <div className="flex flex-wrap gap-1 sm:gap-1.5">
+                        {industry.highlight.split("·").map((tag, i) => (
+                          <span key={i} className={`text-[10px] sm:text-xs px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-gradient-to-r ${industry.lightGradient} text-slate-600 dark:text-slate-300`}>
+                            {tag.trim()}
+                          </span>
+                        ))}
+                      </div>
                     </div>
 
-                    {/* 进入按钮 */}
-                    <div className={`flex items-center justify-center gap-2 py-2.5 rounded-xl bg-gradient-to-r ${industry.gradient} text-white text-sm font-medium transition-all duration-300 ${isHovered ? "opacity-100" : "opacity-90"}`}>
+                    {/* 底部按钮 - 固定在底部 */}
+                    <div className={`mt-auto pt-3 sm:pt-4 flex items-center justify-center gap-2 py-2 sm:py-2.5 rounded-xl bg-gradient-to-r ${industry.gradient} text-white text-xs sm:text-sm font-medium transition-all duration-300 ${isHovered ? "opacity-100" : "opacity-90"}`}>
                       开始选择
-                      <ArrowRight className={`w-4 h-4 transition-transform duration-300 ${isHovered ? "translate-x-1" : ""}`} />
+                      <ArrowRight className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-300 ${isHovered ? "translate-x-1" : ""}`} />
                     </div>
                   </div>
                 </div>
@@ -396,8 +403,8 @@ export default function MockInterviewPage() {
           </div>
 
           {/* 底部提示 */}
-          <div className="text-center">
-            <p className="text-sm text-muted-foreground">
+          <div className="text-center px-4">
+            <p className="text-xs sm:text-sm text-muted-foreground">
               💡 选择行业后，将进一步选择具体职位类别和岗位
             </p>
           </div>

@@ -160,7 +160,7 @@ const experienceConfigs: Record<string, { difficulty: string; label: string; pro
 // SDK配置 - 使用环境变量或默认配置
 const getSDKConfig = () => ({
   baseUrl: process.env.Z_AI_BASE_URL || "https://open.bigmodel.cn/api/paas/v4",
-  apiKey: process.env.Z_AI_API_KEY || "sk-1c72af143be642a48bc17a719dbe570b"
+  apiKey: process.env.Z_AI_API_KEY || "27bbd80fdeb14d98b22d0b51de850c0b.ZcFZOkplWxmYzAmG"
 });
 
 export async function POST(request: NextRequest) {

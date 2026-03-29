@@ -182,13 +182,17 @@ const experienceConfigs: Record<string, { difficulty: string; label: string; pro
   }
 };
 
-// SDK初始化 - 从环境变量或配置文件读取
+// SDK初始化 - 优先从环境变量读取，否则使用默认配置
+// 注意：生产环境建议在平台配置环境变量 Z_AI_API_KEY
+const DEFAULT_API_KEY = "b6072c1b6697481a9bf6c23a92aa33a2.37IeN1oVmvIjW4AV";
+const DEFAULT_BASE_URL = "https://open.bigmodel.cn/api/paas/v4";
+
 const getAPIKey = () => {
-  return process.env.Z_AI_API_KEY || process.env.NEXT_PUBLIC_Z_AI_API_KEY || "";
+  return process.env.Z_AI_API_KEY || process.env.NEXT_PUBLIC_Z_AI_API_KEY || DEFAULT_API_KEY;
 };
 
 const getBaseUrl = () => {
-  return process.env.Z_AI_BASE_URL || "https://open.bigmodel.cn/api/paas/v4";
+  return process.env.Z_AI_BASE_URL || DEFAULT_BASE_URL;
 };
 
 export async function POST(request: NextRequest) {
@@ -198,17 +202,12 @@ export async function POST(request: NextRequest) {
 
     console.log("API Request:", { action, industry, position, userExperience, historyLength: history?.length });
 
-    // SDK初始化 - 显式传递配置
+    // SDK初始化
     const apiKey = getAPIKey();
     const baseUrl = getBaseUrl();
+    console.log("Using API config:", { hasKey: !!apiKey, baseUrl });
 
-    let zai;
-    if (apiKey) {
-      zai = await ZAI.create({ apiKey, baseUrl });
-    } else {
-      // 如果没有显式配置，让SDK自动读取配置文件
-      zai = await ZAI.create();
-    }
+    const zai = await ZAI.create({ apiKey, baseUrl });
 
     // 开始面试
     if (action === "start") {

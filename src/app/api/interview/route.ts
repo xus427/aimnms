@@ -184,7 +184,7 @@ const experienceConfigs: Record<string, { difficulty: string; label: string; pro
 // SDK配置
 const getSDKConfig = () => {
   // 优先使用环境变量，如果没有则使用默认配置
-  const apiKey = process.env.Z_AI_API_KEY || "sk-1c72af143be642a48bc17a719dbe570b";
+  const apiKey = process.env.Z_AI_API_KEY || "b6072c1b6697481a9bf6c23a92aa33a2.37IeN1oVmvIjW4AV";
   return {
     baseUrl: process.env.Z_AI_BASE_URL || "https://open.bigmodel.cn/api/paas/v4",
     apiKey

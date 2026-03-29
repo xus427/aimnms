@@ -229,6 +229,7 @@ ${expConfig.prompt}
       ];
 
       const completion = await zai.chat.completions.create({
+        model: "glm-4-flash",
         messages,
         thinking: { type: "disabled" }
       });
@@ -282,6 +283,7 @@ ${expConfig.prompt}
 
       // 调用LLM
       const completion = await zai.chat.completions.create({
+        model: "glm-4-flash",
         messages: messagesToSend as Array<{ role: "assistant" | "user"; content: string }>,
         thinking: { type: "disabled" }
       });

@@ -182,17 +182,19 @@ const experienceConfigs: Record<string, { difficulty: string; label: string; pro
   }
 };
 
-// SDK初始化 - 优先从环境变量读取，否则使用默认配置
-// 注意：生产环境建议在平台配置环境变量 Z_AI_API_KEY
-const DEFAULT_API_KEY = "b6072c1b6697481a9bf6c23a92aa33a2.37IeN1oVmvIjW4AV";
-const DEFAULT_BASE_URL = "https://open.bigmodel.cn/api/paas/v4";
-
+// SDK初始化 - 从环境变量读取API配置
+// 安全提示：API Key 必须通过环境变量配置，禁止硬编码
+// 在部署平台（如Vercel/Netlify）配置环境变量 Z_AI_API_KEY
 const getAPIKey = () => {
-  return process.env.Z_AI_API_KEY || process.env.NEXT_PUBLIC_Z_AI_API_KEY || DEFAULT_API_KEY;
+  const apiKey = process.env.Z_AI_API_KEY;
+  if (!apiKey) {
+    console.error("错误：未配置 Z_AI_API_KEY 环境变量");
+  }
+  return apiKey;
 };
 
 const getBaseUrl = () => {
-  return process.env.Z_AI_BASE_URL || DEFAULT_BASE_URL;
+  return process.env.Z_AI_BASE_URL || "https://open.bigmodel.cn/api/paas/v4";
 };
 
 export async function POST(request: NextRequest) {
@@ -206,6 +208,14 @@ export async function POST(request: NextRequest) {
     const apiKey = getAPIKey();
     const baseUrl = getBaseUrl();
     console.log("Using API config:", { hasKey: !!apiKey, baseUrl });
+
+    // 检查API Key是否配置
+    if (!apiKey) {
+      return NextResponse.json(
+        { success: false, error: "服务配置错误：未配置API Key，请联系管理员在环境变量中设置 Z_AI_API_KEY" },
+        { status: 500 }
+      );
+    }
 
     const zai = await ZAI.create({ apiKey, baseUrl });
 

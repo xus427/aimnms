@@ -1,7 +1,16 @@
 // Netlify Function for AI Interview API
 // This function handles interview sessions with GLM AI model
 
-const API_KEY = process.env.API_KEY || 'sk-1c72af143be642a48bc17a719dbe570b';
+// 安全提示：API Key 必须通过环境变量配置，禁止硬编码
+// 在Netlify平台配置环境变量 API_KEY
+const getApiKey = () => {
+  const apiKey = process.env.API_KEY;
+  if (!apiKey) {
+    console.error("错误：未配置 API_KEY 环境变量");
+  }
+  return apiKey;
+};
+
 const MODEL = 'glm-4-flash';
 const API_URL = 'https://open.bigmodel.cn/api/paas/v4/chat/completions';
 
@@ -59,11 +68,16 @@ function generateSystemPrompt(industry, position, userExperience) {
 
 // 调用GLM API
 async function callGLMAPI(messages) {
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    throw new Error('服务配置错误：未配置API Key，请在Netlify环境变量中设置 API_KEY');
+  }
+  
   const response = await fetch(API_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${API_KEY}`
+      'Authorization': `Bearer ${apiKey}`
     },
     body: JSON.stringify({
       model: MODEL,

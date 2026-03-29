@@ -35,7 +35,10 @@ import {
   Search,
   Zap,
   ArrowRight,
-  Users
+  Users,
+  BookOpen,
+  Mic2,
+  Globe
 } from "lucide-react";
 
 // 行业配置
@@ -131,6 +134,26 @@ const industries = [
       { id: "cons_bd", name: "业务拓展类", icon: TrendingUp, positions: ["客户经理", "商务拓展（BD）", "大客户总监", "投标专员"] },
       { id: "cons_research", name: "研究与支持类", icon: Search, positions: ["行业研究员", "数据分析师", "知识管理专员", "市场调研员"] },
       { id: "cons_func", name: "内部职能类", icon: Settings, positions: ["财务", "IT支持", "人力资源（内部HR）", "行政", "市场部（内容/活动）"] }
+    ]
+  },
+  {
+    id: "education",
+    name: "教育/培训行业",
+    shortName: "教育培训",
+    icon: BookOpen,
+    description: "K12、高等教育、职业培训、在线教育，涵盖教学教研、课程研发、教务管理核心岗位",
+    gradient: "from-teal-500 via-cyan-500 to-sky-500",
+    lightGradient: "from-teal-100 to-sky-100",
+    iconBg: "bg-gradient-to-br from-teal-500 to-sky-500",
+    stats: "28个热门职位",
+    highlight: "教学 · 教研 · 课程 · 运营",
+    categories: [
+      { id: "edu_teaching", name: "教学类", icon: GraduationCap, positions: ["学科教师（语数英理化生政史地）", "幼教老师/幼儿园教师", "小学/初中/高中教师", "国际学校教师（IB/AP/A-Level）", "特教老师（特殊教育）", "艺术类教师（音乐/美术/舞蹈）", "体育教师", "心理咨询师/心理老师"] },
+      { id: "edu_research", name: "教研与课程类", icon: BookOpen, positions: ["教研员/教学研究员", "课程设计师", "教材编辑", "教学产品经理", "STEAM教育研发", "在线课程策划", "题库研发专员", "教育内容主编"] },
+      { id: "edu_training", name: "培训与企业大学类", icon: Mic2, positions: ["企业培训师", "培训经理/总监", "企业大学运营", "学习发展专员（L&D）", "培训课程开发", "内训师", "培训运营专员", "领导力培训顾问"] },
+      { id: "edu_online", name: "在线教育与运营类", icon: Globe, positions: ["在线教育运营", "直播课运营/助教", "社群运营（教育）", "用户增长（教育产品）", "私域运营（教育）", "学习顾问/班主任", "课程顾问/销售", "教育产品运营"] },
+      { id: "edu_admin", name: "教务与管理类", icon: Users, positions: ["教务主管/经理", "校区校长/园长", "招生主管/经理", "学生事务主管", "学术总监/教学总监", "年级组长/学科组长", "升学指导老师", "留学顾问"] },
+      { id: "edu_func", name: "职能支持类", icon: Settings, positions: ["教育行业HR", "教育行业财务", "市场营销（教育）", "品牌推广（教育机构）", "IT运维（教育科技）", "行政后勤"] }
     ]
   }
 ];

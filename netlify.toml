@@ -12,9 +12,9 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-# 环境变量（敏感信息请在 Netlify 控制台配置）
-# [build.environment]
-#   GLM_API_KEY = "your-api-key"
+# 确保环境变量在所有上下文中可用
+[functions]
+  node_bundler = "esbuild"
 
 # 安全headers
 [[headers]]
@@ -29,3 +29,11 @@
   for = "/_next/static/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# API路由配置 - 确保环境变量可用
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/nextjs_api_route/:splat"
+  status = 200
+  conditions = {Role = ["admin"]}
+  force = false

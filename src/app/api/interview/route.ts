@@ -1,6 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// 行业HR面试官设定 - 内置配置，根据用户选择的行业自动匹配
+// 调试：打印所有环境变量（不包含值，只显示键名）
+console.log("=== Environment Variables Debug ===");
+console.log("Available env keys:", Object.keys(process.env).filter(k => !k.includes('SECRET') && !k.includes('KEY')).join(", "));
+console.log("Z_AI_API_KEY exists:", !!process.env.Z_AI_API_KEY);
+console.log("GLM_API_KEY exists:", !!process.env.GLM_API_KEY);
+console.log("API_KEY exists:", !!process.env.API_KEY);
+console.log("=================================");
+
+// 行业HR面试官设定 - 内置配置
 const hrInterviewerConfigs: Record<string, {
   name: string;
   hrType: string;
@@ -252,9 +260,28 @@ const experienceConfigs: Record<string, { difficulty: string; label: string; pro
 const GLM_API_URL = "https://open.bigmodel.cn/api/paas/v4/chat/completions";
 const GLM_MODEL = "glm-4-flash";
 
-// 获取 API Key - 支持多种环境变量名称
+// 获取 API Key - 支持多种环境变量名称，并添加详细日志
 const getAPIKey = () => {
-  return process.env.Z_AI_API_KEY || process.env.GLM_API_KEY || process.env.API_KEY;
+  const keys = {
+    Z_AI_API_KEY: process.env.Z_AI_API_KEY,
+    GLM_API_KEY: process.env.GLM_API_KEY,
+    API_KEY: process.env.API_KEY
+  };
+  
+  console.log("Checking API keys:", {
+    Z_AI_API_KEY: keys.Z_AI_API_KEY ? `exists(${keys.Z_AI_API_KEY.length} chars)` : "not found",
+    GLM_API_KEY: keys.GLM_API_KEY ? `exists(${keys.GLM_API_KEY.length} chars)` : "not found",
+    API_KEY: keys.API_KEY ? `exists(${keys.API_KEY.length} chars)` : "not found"
+  });
+  
+  const apiKey = keys.Z_AI_API_KEY || keys.GLM_API_KEY || keys.API_KEY;
+  
+  if (!apiKey) {
+    console.error("ERROR: No API key found in environment variables!");
+    console.error("Please set one of: Z_AI_API_KEY, GLM_API_KEY, or API_KEY in Netlify environment variables");
+  }
+  
+  return apiKey;
 };
 
 // 调用 GLM API
@@ -262,51 +289,76 @@ async function callGLMAPI(messages: Array<{ role: string; content: string }>) {
   const apiKey = getAPIKey();
   
   if (!apiKey) {
-    throw new Error("服务配置错误：未配置API Key，请在环境变量中设置 Z_AI_API_KEY");
+    throw new Error("服务配置错误：未配置API Key。请在Netlify环境变量中设置 Z_AI_API_KEY");
   }
 
   console.log("Calling GLM API with model:", GLM_MODEL);
   console.log("Messages count:", messages.length);
+  console.log("API Key prefix:", apiKey.substring(0, 8) + "...");
 
-  const response = await fetch(GLM_API_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${apiKey}`
-    },
-    body: JSON.stringify({
-      model: GLM_MODEL,
-      messages: messages,
-      temperature: 0.7,
-      max_tokens: 1500
-    })
-  });
+  try {
+    const response = await fetch(GLM_API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: GLM_MODEL,
+        messages: messages,
+        temperature: 0.7,
+        max_tokens: 1500
+      })
+    });
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error("GLM API Error:", response.status, errorText);
-    throw new Error(`API调用失败: ${response.status} - ${errorText}`);
+    console.log("GLM API response status:", response.status);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("GLM API Error:", response.status, errorText);
+      
+      // 检查是否是API Key问题
+      if (response.status === 401 || response.status === 403) {
+        throw new Error(`API Key无效或已过期，请检查您的API Key是否正确。错误码: ${response.status}`);
+      }
+      
+      throw new Error(`API调用失败(${response.status}): ${errorText}`);
+    }
+
+    const data = await response.json();
+    console.log("GLM API Response success");
+    
+    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+      console.error("Invalid API response structure:", JSON.stringify(data));
+      throw new Error("API返回数据格式异常");
+    }
+    
+    return data.choices[0].message.content;
+  } catch (error) {
+    console.error("callGLMAPI error:", error);
+    throw error;
   }
-
-  const data = await response.json();
-  console.log("GLM API Response success");
-  
-  return data.choices[0].message.content;
 }
 
 export async function POST(request: NextRequest) {
+  console.log("=== New API Request ===");
+  console.log("Timestamp:", new Date().toISOString());
+  
   try {
     const body = await request.json();
     const { action, industry, position, userExperience, message, history } = body;
 
-    console.log("API Request:", { action, industry, position, userExperience, historyLength: history?.length });
+    console.log("Request:", { action, industry, position, userExperience, historyLength: history?.length });
 
     // 检查API Key是否配置
     const apiKey = getAPIKey();
     if (!apiKey) {
-      console.error("API Key not configured");
+      console.error("API Key not configured - returning error response");
       return NextResponse.json(
-        { success: false, error: "服务配置错误：未配置API Key，请联系管理员在环境变量中设置 Z_AI_API_KEY" },
+        { 
+          success: false, 
+          error: "服务配置错误：未配置API Key。请在Netlify环境变量中设置 Z_AI_API_KEY，然后重新部署。" 
+        },
         { status: 500 }
       );
     }
